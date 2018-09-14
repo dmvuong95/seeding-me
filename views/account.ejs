@@ -1,0 +1,63 @@
+<div class="card">
+    <div class="card-header">
+        <i class="fa fa-user"></i>
+        <strong class="card-title pl-2">Thông tin tài khoản</strong>
+    </div>
+    <div class="card-body">
+        <div class="mx-auto d-block">
+            <img class="rounded-circle mx-auto d-block" src="https://graph.facebook.com/<%= user.id %>/picture?type=large" alt="Card image cap" style="max-width: 30%;">
+            <h3 class="mt-2 mb-1" style="text-align:center;"><%= user.name %></h3>
+            <div class="row">
+              <div style="width:20%;text-align:center;">
+                <i class="fa fa-envelope"></i>
+              </div>
+              <div style="width:80%;">
+                <%= user.email %>
+              </div>
+            </div>
+            <div class="row">
+              <div style="width:20%;text-align:center;">
+                <% let g = user.gender; %>
+                <% if(g=='male') { %><i class="fa fa-male"></i><% }else{ %><i class="fa fa-female"></i><% } %>
+              </div>
+              <div style="width:80%;">
+                <% if(g=='male') { %>Nam<% }else{ %>Nữ<% } %>
+              </div>
+            </div>
+            <div class="row">
+              <div style="width:20%;text-align:center;">
+                <i class="fa fa-user"></i>
+              </div>
+              <div style="width:80%;">
+                <% let t = user.userType, e = user.expireDate, d = Date.now(); if (t==1 && e > d){ %>
+                  <span>Thành viên bạc</span>
+                <% }else if (t==2 && e > d){ %>
+                  <span>Thành viên vàng</span>
+                <% }else if (t==3 && e > d){ %>
+                  <span>Thành viên kim cương</span>
+                <% } else{ %>
+                  <span>Thành viên thường</span>
+                <% } %>
+              </div>
+            </div>
+            <% if(e>d) { %>
+            <div class="row">
+              <div style="width:20%;text-align:center;">
+                <i class="fa fa-unlock-alt"></i>
+              </div>
+              <div style="width:80%;">
+                <%= (new Date(e)).toString() %>
+              </div>
+            </div>
+            <% } %>
+            <div class="row">
+              <div style="width:20%;text-align:center;">
+                <i class="fa fa-dollar"></i>
+              </div>
+              <div style="width:80%;">
+                <%= user.coin %> coin
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

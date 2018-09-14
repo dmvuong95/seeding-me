@@ -1,0 +1,21 @@
+{
+  "name": "seeding-me",
+  "version": "1.0.0",
+  "description": "Seeding any facebook post that you want! By Minh Vuong (dmvuong95@gmail.com)",
+  "main": "index.js",
+  "author": "Minh Vuong (dmvuong95@gmail.com)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-force-https": "^1.0.0",
+    "express-session": "^1.15.6",
+    "fbgraph": "^1.4.4",
+    "mongoose": "^5.2.4",
+    "nodemailer": "^4.6.7",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "request": "^2.87.0"
+  }
+}

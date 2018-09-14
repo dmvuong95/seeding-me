@@ -1,0 +1,92 @@
+<% if(post.user_id){ %><!--existed--><% } %>
+<% let t = user.userType, e = user.expireDate, d = Date.now(); %>
+<form action="javascript:sendPostData();" id="formAddPost">
+    <div class="form-group" id="PostData">
+      <div class="form-group">
+        <label class=" form-control-label">Post ID</label>
+        <input name="post_id" class="form-control" value="<%= post.post_id %>" readonly required style="max-width:50%;">
+      </div>
+      <div class="form-group">
+        <label for="text-input" class="form-control-label">Số lượng bình luận</label>
+        <input type="number" id="numOfCmt" name="numOfCmt" class="form-control" required value="<% if(post.numOfCmt) { %><%= post.numOfCmt %><% }else{ %>0<% } %>" style="max-width:25%;">
+      </div>
+      <div class="form-group">
+        <label for="textarea-input" class="form-control-label">Bình luận</label>
+        <textarea id="commentContent" rows="2" placeholder="Nội dung bình luận..." class="form-control"></textarea>
+        <textarea id="replyContent" rows="2" class="form-control" readonly placeholder="Tính năng trả lời tự động đang tạm khoá"></textarea>
+        <button class="btn btn-info btn-sm" onclick="addComment()"><i class="fa fa-plus"></i> Thêm</button>
+      </div>
+      <div class="form-group">
+        <label for="multiple-select" class="form-control-label">Các bình luận đã thêm</label>
+        <select id="listComment" class="form-control" multiple></select>
+        <small class="form-text text-muted">Giữ Ctrl hoặc Command để chọn nhiều</small>
+        <button class="btn btn-danger btn-sm" onclick="deleteComment()"><i class="fa fa-times"></i> Xoá</button>
+      </div>
+      <div class="form-group<% if(!(t >= 2 && e > d)){ %> disabledDOM<% } %>">
+        <label class="form-control-label">Hẹn giờ tương tác:</label>
+        <div class="row">
+          <div class="col">Từ</div><div class="col col-lg-10"><input type="time" name="startTime" <% if(post.startTime){ %>value="<%= post.startTime %>" <% } %>/></div>
+        </div>
+        <div class="row">
+          <div class="col">Đến</div><div class="col col-lg-10"><input type="time" name="endTime" <% if(post.endTime){ %>value="<%= post.endTime %>" <% } %>/></div>
+        </div>
+      </div>
+      <% if(!(t >= 2 && e > d)){ %><small class="form-text text-muted">Bạn phải ít nhất là thành viên vàng để sử dụng tính năng hẹn giờ tương tác!</small><% } %>
+      <div class="row form-group">
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label class=" form-control-label">Số lượng <% if(t >= 1 && e > d){ %>biểu cảm<% }else{ %>like<% } %></label>
+            <input type="number" name="numOfReaction" class="form-control" value="<% if(post.numOfReaction){ %><%= post.numOfReaction %><% }else{ %>0<% } %>" style="max-width:50%;">
+          </div>
+          <div class="form-group<% if(e < d){ %> disabledDOM<% } %>">
+            <label class="form-control-label">Biểu cảm</label>
+            <select name="reactions" class="form-control" multiple style="max-width:50%;" size="3">
+              <option value="LIKE"<% if(post.reactions) { if(isIncluded(post.reactions,'LIKE')) { %> selected<% }} %>>Like</option>
+              <option value="LOVE"<% if(post.reactions) { if(isIncluded(post.reactions,'LOVE')) { %> selected<% }} %>>Love</option>
+              <option value="HAHA"<% if(post.reactions) { if(isIncluded(post.reactions,'HAHA')) { %> selected<% }} %>>Haha</option>
+              <option value="WOW"<% if(post.reactions) { if(isIncluded(post.reactions,'WOW')) { %> selected<% }} %>>Wow</option>
+              <option value="SAD"<% if(post.reactions) { if(isIncluded(post.reactions,'SAD')) { %> selected<% }} %>>Sad</option>
+              <option value="ANGRY"<% if(post.reactions) { if(isIncluded(post.reactions,'ANGRY')) { %> selected<% }} %>>Angry</option>
+            </select>
+            <% if(e > d && t >= 1){ %><small class="form-text text-muted">Giữ Ctrl hoặc Command để chọn nhiều. Không chọn sẽ mặc định Like.</small><% } %>
+          </div>
+          <% if(e < d){ %><small class="form-text text-muted">Bạn phải ít nhất là thành viên bạc để sử dụng tính năng chọn nhiều biểu cảm!</small><% } %>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-group<% if(e < d){ %> disabledDOM<% } %>">
+            <label class="form-control-label">Độ tuổi người bình luận</label>
+            <select name="age" class="form-control" multiple style="max-width:50%;" size="3">
+              <option value="<18"<% if(post.age) { if(isIncluded(post.age,'<18')) { %> selected<% }} %>>Nhỏ hơn 18</option>
+              <option value="18-25"<% if(post.age) { if(isIncluded(post.age,'18-25')) { %> selected<% }} %>>18 - 25</option>
+              <option value="25-30"<% if(post.age) { if(isIncluded(post.age,'25-30')) { %> selected<% }} %>>25 - 30</option>
+              <option value="30-40"<% if(post.age) { if(isIncluded(post.age,'30-40')) { %> selected<% }} %>>30 - 40</option>
+              <option value="40-50"<% if(post.age) { if(isIncluded(post.age,'40-50')) { %> selected<% }} %>>40 - 50</option>
+              <option value=">50"<% if(post.age) { if(isIncluded(post.age,'>50')) { %> selected<% }} %>>Ngoài 50</option>
+            </select>
+            <% if(e > d && t >= 1){ %><small class="form-text text-muted">Giữ Ctrl hoặc Command để chọn nhiều. Không chọn sẽ mặc định tất cả độ tuổi.</small><% } %>
+          </div>
+          <div class="form-group<% if(e < d){ %> disabledDOM<% } %>">
+            <label class="form-control-label">Giới tính người bình luận</label>
+            <select<% if(e > d){ %> name="gender"<% } %> class="form-control" style="max-width:50%;">
+              <option value="all"<% if(post.gender) { if(post.gender=='all'){ %> selected<% }}else{ %> selected<% } %>>Cả nam và nữ</option>
+              <option value="male"<% if(post.gender=='male'){ %> selected<% } %>>Nam</option>
+              <option value="female"<% if(post.gender=='female'){ %> selected<% } %>>Nữ</option>
+            </select>
+          </div>
+          <% if(e < d){ %><small>Bạn phải ít nhất là thành viên bạc để sử dụng tính năng chọn độ tuổi và giới tính của người bình luận!</small><% } %>
+        </div>
+      </div>
+    </div>
+    <div class="form-group" style="padding-left:25px;">
+      <p>Chú ý: Tổng số bình luận và <% if(t >= 1 && e > d){ %>biểu cảm<% }else{ %>like<% } %> không thể vượt quá số coin</p>
+      <div class="checkbox">
+        <label class="form-check-label">
+          <input type="checkbox" id="readySend" name="ready" value="OK" class="form-check-input"> Sẵn sàng gửi
+        </label>
+      </div>
+    </div>
+    <div class="form-actions form-group">
+        <button type="submit" class="btn btn-primary btn-sm"> Tiếp <i class="fa fa-caret-right"></i></button>
+    </div>
+</form>
+<% function isIncluded(arr,item){ for (var i = 0; i < arr.length; i++) { if (item == arr[i]) return true;} return false;} %>

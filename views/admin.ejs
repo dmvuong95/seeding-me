@@ -1,0 +1,61 @@
+<div style="padding:0px 10px;">
+  <div class="row">
+    <input class="au-input au-input--xl" type="text" name="search" placeholder="Tìm kiếm user..." />
+    <button class="au-btn--submit" type="button"><i class="zmdi zmdi-search"></i></button>
+  </div>
+  <div class="row" id="listUsers">
+    <label>SL User: <%= users.length %></label>
+    <div class="table-responsive table--no-card m-b-30">
+      <table class="table table-borderless table-striped table-earning">
+        <thead>
+          <tr>
+            <th>Tên</th>
+            <th>Seed</th>
+            <th>Loại</th>
+            <th>Ngày hết hạn</th>
+            <th class="text-right">Coin</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Block</th>
+          </tr>
+        </thead>
+        <tbody><% users.forEach((user)=>{ %>
+          <tr>
+            <td><a href="https://www.facebook.com/<%= user.id %>" target="_blank"><%= user.name %></a></td>
+            <td><%= user.seed %></td>
+            <% let e = user.expireDate, d = Date.now(), t = user.userType; %>
+            <td>
+            <% if (e < d) { %>
+              Thường
+            <% } else if (t == 1) { %>
+              Bạc
+            <% } else if (t == 2) { %>
+              Vàng
+            <% } else if (t == 3) { %>
+              Kim cương
+            <% } %>
+            </td>
+            <td><% if (e > d) { %><%= (new Date(e+7*3600000)).toISOString() %><% } %></td>
+            <td class="text-right"><%= user.coin %></td>
+            <td><% if(user.email){ %><%= user.email %><% } %></td>
+            <td><% if(user.phone){ %><%= user.phone %><% } %></td>
+            <td>
+              <div class="table-data-feature">
+              <button class="item block" uid="<%= user.id %>" data-toggle="tooltip" data-placement="top" title="" data-original-title="Block">
+                <i id="i<%= user.id %>" <% if(user.blocked) { %>style="color:red;"<% } %> class="zmdi zmdi-delete"></i>
+              </button></div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="copyright">
+        <p>Copyright © 2018 <a href="http://lotusmediaz.com/" target="_blank">Lotus Mediaz</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</div>

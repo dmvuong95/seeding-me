@@ -1,0 +1,58 @@
+<div class="overview-wrap" style="padding-bottom:10px;">
+  <form action="javascript:addPage();">
+    <input type="text" id="page_id" required placeholder="Page ID hoặc Page Username" class="au-input au-input--xl">
+    <button type="submit" class="au-btn au-btn-icon au-btn--blue">
+      <i class="zmdi zmdi-plus"></i>thêm page
+    </button>
+  </form>
+</div>
+<div id="pagesCard">
+<% if(pages.length){ %>
+<div class="table-responsive table-responsive-data2">
+  <table class="table table-data2">
+    <thead>
+      <tr>
+        <th>Tên Page</th>
+        <th>Loại Page</th>
+        <th>Trạng thái</th>
+        <th>SL like</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% pages.forEach((page,i)=>{ %>
+      <tr class="tr-shadow" id="<%= page.page_id %>">
+        <td><a href="https://www.facebook.com/<%= page.page_id %>" target="_blank"><%= page.name %></a></td>
+        <td class="desc"><%= page.category %></td>
+        <td id="<%= page.page_id %>td">
+        <% if(page.seeding) { %>
+          <span class="status--process" style="cursor:pointer;" onclick="changePageSeedState('<%= page.page_id %>');">Đang tăng like<% if(page.rate){ %> và rate<% } %></span>
+        <% } else if (page.numOfLike > page.liked.length) { %>
+          <span class="status--denied" style="cursor:pointer;" onclick="changePageSeedState('<%= page.page_id %>');">Đã tắt like<% if(page.rate){ %> và rate<% } %></span>
+        <% } else { %>
+          <span style="color:#428cfa;">Thành công</span>
+        <% } %>
+        </td>
+        <td><%= page.liked.length %>/<%= page.numOfLike %></td>
+        <td>
+          <div class="table-data-feature">
+            <button class="item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="deletePage('<%= page.page_id %>','<%= page.name %>')">
+              <i class="zmdi zmdi-delete"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      <% if(i != pages.length - 1) { %><tr class="spacer"></tr><% } %>
+    <% }); %>
+    </tbody>
+  </table>
+</div>
+<% } else { %>
+  <div class="card">
+    <div class="card-header"></div>
+    <div class="card-body card-block">
+      <h4>Oopp!! Bạn chưa thêm page nào để tăng like!</h4>
+    </div>
+  </div>
+<% } %>
+</div>

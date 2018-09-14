@@ -1,0 +1,53 @@
+<% if(posts.length == 0) { %>
+<div class="card">
+  <div class="card-header">Thêm bài cần seeding</div>
+  <div class="card-body card-block">
+    <h4>Oopp!! Bạn chưa có bài seeding nào!</h4>
+    <div class="form-actions form-group" style="padding-top:10px;">
+      <button type="button" class="btn btn-primary btn-sm" onclick="backToGetLink();"> Thêm bài <i class="fa fa-caret-right"></i></button>
+    </div>
+  </div>
+</div>
+<% }else{ %>
+<% for(i = 0; i < posts.length; i++){ %>
+<% let post = posts[i]; %>
+  <div class="card" id="<%= post.post_id %>">
+    <div class="card-header">
+      <div class="row">
+        <div style="width:60%;padding-left:10px;">ID: <%= post.post_id %></div>
+        <div id="btn<%= post.post_id %>" style="width:40%;text-align:right;padding-right:10px;">
+        <% if(post.seeding){ %>
+          <button class="btn btn-success btn-sm" onclick="changePostSeedState('<%= post.post_id %>')"><i class="fa fa-play"></i> Seeding</button>
+        <% }else{ %>
+          <% if(post.commented.length < post.numOfCmt || post.reacted.length < post.numOfReaction){ %>
+            <button class="btn btn-danger btn-sm" onclick="changePostSeedState('<%= post.post_id %>')"><i class="fa fa-pause"></i> Off seed</button>
+          <% }else{ %>
+            <span style="color:#00cc00;">Hoàn thành <i class="fa fa-check-circle"></i></span>
+          <% } %>
+        <% } %>
+        </div>
+      </div>
+    </div>
+    <div class="card-body card-block">
+      <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F<%= post.post_id.split('_')[0] %>%2Fposts%2F<%= post.post_id.split('_')[1] %>&show_text=true&appId=141977443149783&width=500" style="border:none;width:500px;height:350px;" scrolling="yes" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+      <br>
+      Comment:
+      <div class="progress mb-2">
+        <div class="progress-bar bg-<% if(post.commented.length>=post.numOfCmt){ %>info<% }else{ %>success progress-bar-striped progress-bar-animated<% } %>" role="progressbar" style="width:<%= Math.round(100*(post.commented.length/post.numOfCmt)) %>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><%= post.commented.length %>/<%= post.numOfCmt %></div>
+      </div>
+      Reaction:
+      <div class="progress mb-2">
+        <div class="progress-bar bg-<% if(post.reacted.length>=post.numOfReaction){ %>info<% }else{ %>success progress-bar-striped progress-bar-animated<% } %>" role="progressbar" style="width:<%= Math.round(100*(post.reacted.length/post.numOfReaction)) %>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><%= post.reacted.length %>/<%= post.numOfReaction %></div>
+      </div><br>
+      <div class="row">
+        <div class="col" style="text-align:center;">
+          <button type="button" class="btn btn-primary" onclick="editPost('<%= post.post_id %>')" style="width:200px;"><i class="fa fa-edit"></i> Chỉnh sửa</button>
+        </div>
+        <div class="col" style="text-align:center;">
+          <button type="button" class="btn btn-warning" onclick="deletePost('<%= post.post_id %>')" style="width:200px;"><i class="fa fa-times"></i> Xoá</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } %>
+<% } %>
